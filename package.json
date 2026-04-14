@@ -1,0 +1,14 @@
+{
+  "name": "my-notebook",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "vuepress": "^1.9.10",
+    "vuepress-theme-reco": "^1.6.17",
+    "@vuepress/plugin-medium-zoom": "^1.9.10",
+    "markdown-it-katex": "^2.0.3"
+  }
+}
