@@ -1,6 +1,29 @@
+
+
 // 自定义主色调
 $accentColor = #3eaf7c
 
 // 首页背景（如果想跟参考站一样有背景图，在 public 下放一张）
 // .hero .mask
 //   background url('/bg.jpg') center top / cover no-repeat
+
+.page .content__default code
+    color: #c7524e 
+    // background-color: #f9f2f4
+
+/* 保护 KaTeX 区域不被主题乱改行高 / 对齐 */
+.katex, .katex *
+  line-height: 1.2 !important
+  vertical-align: baseline !important
+
+/* 明确指定上标盒子的垂直对齐方式 */
+.katex .msupsub 
+  vertical-align: baseline !important
+
+/* 确保 MathML 部分不影响布局（KaTeX 官方也是这么干的） */
+.katex .katex-mathml
+  position: absolute !important
+  clip: rect(1px, 1px, 1px, 1px) !important
+  height: 1px !important
+  width: 1px !important
+  overflow: hidden !important
