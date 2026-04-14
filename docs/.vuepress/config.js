@@ -28,8 +28,7 @@ module.exports = {
         items: [
           { text: 'CUDA', link: '/categories/CUDA/' },
           { text: '密码学', link: '/categories/密码学/' },
-          { text: '数学', link: '/categories/数学/' },
-          { text: '工具', link: '/categories/工具/' }
+          { text: '3DGS', link: '/categories/3DGS/' }
         ]
       },
       { text: 'Tag', link: '/tag/', icon: 'reco-tag' },
