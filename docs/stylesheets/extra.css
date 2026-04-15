@@ -1,0 +1,67 @@
+/* 科技感主题覆盖 */
+
+/* 自定义配色变量 */
+:root {
+  --md-primary-fg-color: #1a237e;
+  --md-accent-fg-color: #00e5ff;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #0d1117;
+  --md-default-fg-color--light: #8b949e;
+  --md-typeset-a-color: #58a6ff;
+  --md-accent-fg-color: #00e5ff;
+  --md-code-bg-color: #161b22;
+}
+
+/* 代码块科技感 */
+.md-typeset code {
+  border-radius: 4px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre > code {
+  border-left: 3px solid #00e5ff;
+}
+
+/* 导航栏毛玻璃效果 */
+.md-header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-md-color-scheme="slate"] .md-header {
+  background-color: rgba(13, 17, 23, 0.85);
+}
+
+/* sidebar 选中项高亮 */
+[data-md-color-scheme="slate"] .md-nav__link--active {
+  color: #00e5ff !important;
+  font-weight: 600;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00e5ff44;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff88;
+}
+
+/* 行内代码 */
+[data-md-color-scheme="slate"] .md-typeset :not(pre) > code {
+  color: #00e5ff;
+  background-color: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+}
+
+/* KaTeX 公式区域 */
+.arithmatex {
+  overflow-x: auto;
+}

@@ -1,6 +1,5 @@
-node_modules/
-docs/.vuepress/dist/
-docs/.vuepress/.temp/
-docs/.vuepress/.cache/
-*.log
+site/
+__pycache__/
+*.pyc
 .DS_Store
+*.log
