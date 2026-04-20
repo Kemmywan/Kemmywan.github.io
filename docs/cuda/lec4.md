@@ -24,13 +24,13 @@ tags:
 
 我们可以从小到大（指工作范围）的来看一下gpu的存储层级架构：
 
-- 本地存储 Local storage：每个线程都会有属于其自己的本地存储，一般来说就是寄存器 regsiters，具体何使用寄存器则由编译器 compiler来决定。
-- 共享内存 shared memory：由同一个区块 block内的线程共同使用，分配大约48KB，这和具体架构有关，也可能是64KB，96KB，等等。有着低延迟和高吞吐量的特点，后者可以干到1TB/s。可以人工显示管理。
-- L1缓存：作为缓存模块，用于加速一个SM上所有线程的内存访问，是一个每线程块资源 per thread block resource
-- L2缓存：同样作为缓存模块，与L1区别，是设备范围的资源 device-wide resource。是GPU共享的最后一级缓存，由所有SM共同使用，逻辑上属于全局共享，和L1一样不受人工管理
-- 全局内存 Global memory：这是一个可以由全体线程，包括主机（CPU）共同访问的模块，也是最后的，最大的层级元素，高延迟和低吞吐自不必多说，吞吐量在900GB/s左右（Volta V100），虽然与GPU架构中其他元素相比很低，但和其他类型的处理器相比已经是鹤立鸡群（典型的CPU内存带宽只有40-80GB/s）
+- 本地存储 Local storage：每个线程都会有属于其自己的本地存储，一般来说就是寄存器 regsiters，具体何使用寄存器则由编译器 compiler来决定。  
+- 共享内存 shared memory：由同一个区块 block内的线程共同使用，分配大约48KB，这和具体架构有关，也可能是64KB，96KB，等等。有着低延迟和高吞吐量的特点，后者可以干到1TB/s。可以人工显示管理。  
+- L1缓存：作为缓存模块，用于加速一个SM上所有线程的内存访问，是一个每线程块资源 per thread block resource  
+- L2缓存：同样作为缓存模块，与L1区别，是设备范围的资源 device-wide resource。是GPU共享的最后一级缓存，由所有SM共同使用，逻辑上属于全局共享，和L1一样不受人工管理  
+- 全局内存 Global memory：这是一个可以由全体线程，包括主机（CPU）共同访问的模块，也是最后的，最大的层级元素，高延迟和低吞吐自不必多说，吞吐量在900GB/s左右（Volta V100），虽然与GPU架构中其他元素相比很低，但和其他类型的处理器相比已经是鹤立鸡群（典型的CPU内存带宽只有40-80GB/s）  
 
-![alt text](lec4_img/lec4_2.png.png)
+![alt text](lec4_img/lec4_2.png)
 
 这是一个更直观的GPU内部的层级图。
 
@@ -46,10 +46,10 @@ gpu上的所有操作都是以warp(32 threads)为单位来进行的，load也不
 
 在每一个thread提供load目标地址之后，系统需要做的事情是确定需要取缓存中的哪些line。更底层的，是去找需要取出哪些segment。这首先要求我们做一个凝聚 colaescing，将warp的request包装成一个完成的Load需求传给内存控制器，比如一串连续的地址请求，就可以包装成读取一整串line（见下面的第一幅图
 
-> 区分一下line和segment：\
-> line 一般指cache-line，是在L1/L2缓存中存储数据的基本单位，在大部分gpu上是128bytes，是操作cache的最小单位 \
-> segment 是在某个层次上（比如dram/L2-bus）上，一次内存事务可以操作的最小连续字节，一般是32bytes，是一个偏向硬件内存控制器的一个“基本块”的概念 \
-> 所以说在处理存取事务的时候，我们实际关注的是segment，Line则是我们后续进行凝聚 colaescing要关注的一个面向缓存的单位
+> 区分一下line和segment：  
+> line 一般指cache-line，是在L1/L2缓存中存储数据的基本单位，在大部分gpu上是128bytes，是操作cache的最小单位  
+> segment 是在某个层次上（比如dram/L2-bus）上，一次内存事务可以操作的最小连续字节，一般是32bytes，是一个偏向硬件内存控制器的一个“基本块”的概念  
+> 所以说在处理存取事务的时候，我们实际关注的是segment，Line则是我们后续进行凝聚 colaescing要关注的一个面向缓存的单位  
 
 这将涉及到一个地址的映射 mapping操作，会交由内存控制器来完成，并决定是否从缓存中取数据。
 
@@ -89,9 +89,9 @@ gpu上的所有操作都是以warp(32 threads)为单位来进行的，load也不
 
 总结来看，关于global-memory的优化有以下这几条guidelines：
 
-- 如何更好的凝聚warp的需求：地址的对齐和连续性可以提高利用率
-- 让访存操作填满内存总线：在同一个thread上同时发起多个请求，同时启用足够多的线程来占用吞吐
-- 使用缓存：不止于L1/L2，当然这些是后话
+- 如何更好的凝聚warp的需求：地址的对齐和连续性可以提高利用率  
+- 让访存操作填满内存总线：在同一个thread上同时发起多个请求，同时启用足够多的线程来占用吞吐  
+- 使用缓存：不止于L1/L2，当然这些是后话  
 
 ## SHARED MEMORY
 
@@ -105,10 +105,11 @@ gpu上的所有操作都是以warp(32 threads)为单位来进行的，load也不
 
 当我们要分析共享内存的性能的时候，别忘了warp的定义：warp是“访存指令执行”的最小单位，warp上的32个threads执行同一条指令，只是从不同的地方取数。每个thread的访存需求会被warp打包送进共享内存的bank逻辑里处理，所以我们这里考虑32个threads-32个banks的具体对应情况来分析。
 
-定义以下几个概念：
-- “银行冲突”bank-conflicts：n个thread指向同一个bank需求的时候，产生冲突，延缓性能，称作n-way bank conflicts
-- “排队”serialization：当若干个thread要在同一个bank取不同的内容的时候，他们必须排队，然后bank用多个clock分别处理每个人的业务
-- “共需”multicast：当若干个thread要取的是同一个bank的同一个内容的时候，bank就不用夺管，直接一起处理业务，只需要一个clock
+定义以下几个概念：  
+
+- “银行冲突”bank-conflicts：n个thread指向同一个bank需求的时候，产生冲突，延缓性能，称作n-way bank conflicts  
+- “排队”serialization：当若干个thread要在同一个bank取不同的内容的时候，他们必须排队，然后bank用多个clock分别处理每个人的业务  
+- “共需”multicast：当若干个thread要取的是同一个bank的同一个内容的时候，bank就不用夺管，直接一起处理业务，只需要一个clock  
 
 可以看回上面那张大图，可以想象当我们需要取出矩阵的一列（这个操作显然非常常见）来操作，我们往往碰到一个serialization的难题。取出一行则很轻松，可以并行操作，在一个clock内轻松解决。
 
