@@ -1,0 +1,766 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="CUDA / 密码学 / 3DGS">
+      
+      
+        <meta name="author" content="Kemmy">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>lec4-CUDA optimization Part2 - Kemmy的笔记本</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains+Mono:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"JetBrains Mono";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lec4-cuda-optimization-part2" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="Kemmy的笔记本" class="md-header__button md-logo" aria-label="Kemmy的笔记本" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19v-3h8v3zm-4.5-6L2.47 7h4.24l4.96 4.95c.58.59.58 1.55 0 2.12L6.74 19H2.5z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Kemmy的笔记本
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              lec4-CUDA optimization Part2
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="cyan"  aria-label="切换到浅色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换到浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="cyan"  aria-label="切换到深色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换到深色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Kemmy的笔记本" class="md-nav__button md-logo" aria-label="Kemmy的笔记本" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 19v-3h8v3zm-4.5-6L2.47 7h4.24l4.96 4.95c.58.59.58 1.55 0 2.12L6.74 19H2.5z"/></svg>
+
+    </a>
+    Kemmy的笔记本
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DGS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3DGS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3DGS/0415/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0415-meeting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CUDA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CUDA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../env-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CUDA 开发环境搭建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    密码学
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    密码学
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/schnorr-agg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schnorr 基本聚合签名算法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-memory-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GLOBAL MEMORY THROUGHPUT
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GLOBAL MEMORY THROUGHPUT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LOAD OPERATION
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SHARED MEMORY
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lec4-cuda-optimization-part2">lec4-CUDA optimization Part2<a class="headerlink" href="#lec4-cuda-optimization-part2" title="Permanent link">&para;</a></h1>
+<p>前面几节课已经讲了基础的cuda内核编写的一些语法规则和示例。
+在这节课我们重点关注“运行速度”，这是使用cuda编程的重中之重，毕竟使用gpu的目的，一言以蔽之，就是加速我们的程序。在上一次的课程中已经讨论了第一个CUDA优化项的内容，那就是有关使用线程的数量——总得来说，我们希望运行尽可能多的线程，来填满gpu的算力，具体选择会根据gpu的架构有所不同。</p>
+<p>这次课程我们来关注第二个cuda优化项：高效地使用gpu上的存储子系统。（大概就是共享内存shared memory？）</p>
+<p>这两个优化项是实现性能优化的两个最重要的因素。（区别于分析驱动analysis-driven的优化，也就是实际使用中根据实地反馈进行的细致调优，和分析器profiler相关）</p>
+<hr />
+<h2 id="global-memory-throughput">GLOBAL MEMORY THROUGHPUT<a class="headerlink" href="#global-memory-throughput" title="Permanent link">&para;</a></h2>
+<p><img alt="alt text" src="../lec4_img/lec4_1.png" /></p>
+<p>我们可以从小到大（指工作范围）的来看一下gpu的存储层级架构：</p>
+<ul>
+<li>本地存储 Local storage：每个线程都会有属于其自己的本地存储，一般来说就是寄存器 regsiters，具体何使用寄存器则由编译器 compiler来决定。</li>
+<li>共享内存 shared memory：由同一个区块 block内的线程共同使用，分配大约48KB，这和具体架构有关，也可能是64KB，96KB，等等。有着低延迟和高吞吐量的特点，后者可以干到1TB/s。可以人工显示管理。</li>
+<li>L1缓存：作为缓存模块，用于加速一个SM上所有线程的内存访问，是一个每线程块资源 per thread block resource</li>
+<li>L2缓存：同样作为缓存模块，与L1区别，是设备范围的资源 device-wide resource。是GPU共享的最后一级缓存，由所有SM共同使用，逻辑上属于全局共享，和L1一样不受人工管理</li>
+<li>全局内存 Global memory：这是一个可以由全体线程，包括主机（CPU）共同访问的模块，也是最后的，最大的层级元素，高延迟和低吞吐自不必多说，吞吐量在900GB/s左右（Volta V100），虽然与GPU架构中其他元素相比很低，但和其他类型的处理器相比已经是鹤立鸡群（典型的CPU内存带宽只有40-80GB/s）</li>
+</ul>
+<p><img alt="alt text" src="lec4_img/lec4_2.png.png" /></p>
+<p>这是一个更直观的GPU内部的层级图。</p>
+<p>当我们讨论性能优化的时候，一般来说就是Load和Store，GPU上的读写和传统CPU上的架构类似，用两级的缓存加速load，然后store的时候涉及一个validate当前L1-cache和L2-cache上的写回 write-back机制来实现效率和准确率的统一。不同的是这里的Load在使用L1-cache的情况下以128-byte的line为单位进行读操作。</p>
+<p>同时gpu上有一种non-caching load，也就是忽略掉L1-cache来进行Load操作。由于L1-cache以block为单位，在一些corner situation中，这会有更好的效果。这种情况下以32-byte为单位。这里先按下不表。</p>
+<hr />
+<h3 id="load-operation">LOAD OPERATION<a class="headerlink" href="#load-operation" title="Permanent link">&para;</a></h3>
+<p>gpu上的所有操作都是以warp(32 threads)为单位来进行的，load也不例外。注意这并不意味着说每个thread都在请求同样的东西，32个threads可以有32个不同的address传入，从而请求load不同的内存。</p>
+<p>在每一个thread提供load目标地址之后，系统需要做的事情是确定需要取缓存中的哪些line。更底层的，是去找需要取出哪些segment。这首先要求我们做一个凝聚 colaescing，将warp的request包装成一个完成的Load需求传给内存控制器，比如一串连续的地址请求，就可以包装成读取一整串line（见下面的第一幅图</p>
+<blockquote>
+<p>区分一下line和segment：\
+line 一般指cache-line，是在L1/L2缓存中存储数据的基本单位，在大部分gpu上是128bytes，是操作cache的最小单位 \
+segment 是在某个层次上（比如dram/L2-bus）上，一次内存事务可以操作的最小连续字节，一般是32bytes，是一个偏向硬件内存控制器的一个“基本块”的概念 \
+所以说在处理存取事务的时候，我们实际关注的是segment，Line则是我们后续进行凝聚 colaescing要关注的一个面向缓存的单位</p>
+</blockquote>
+<p>这将涉及到一个地址的映射 mapping操作，会交由内存控制器来完成，并决定是否从缓存中取数据。</p>
+<p>下面来看几种常见的load模式：</p>
+<p><img alt="alt text" src="../lec4_img/lec4_3.png" /></p>
+<p>这种情况下，我们假设warp请求了32个连续且与内存地址对齐的4-byte内容，也就是一共请求了128byte，正好对上一个完整的cache-line。同时我们假设一种最好的情况那就是其和一个line完整对齐，这个时候直接取这个完整的line就可以刚刚好取出所有需要的数据。</p>
+<p>这是我们计算总线利用率应该是100%，也即128/128=100%。</p>
+<p><img alt="alt text" src="../lec4_img/lec4_4.png" /></p>
+<p>在没那么理想的情况下，当我们请求的内容不再能被一个cache-line覆盖，而是跨越的cache-line的一个boundary的时候，可以看到标红的地方，我们实际需要取出256个Bytes的数据来满足warp的需要。</p>
+<p>这里Bus utilization=128/256=50%。然而，假设我们之后的warp按顺序访问后续的内存，而我们的cache机制发挥作用，后续每次Load似乎只需要多读一个line（cache读取忽略不计），那么似乎总线利用率也会约等于100%。这是后话。</p>
+<p><img alt="alt text" src="../lec4_img/lec4_5.png" /></p>
+<p>接下来看点极端的情况，假设我的整个warp实际只需要同一个4-byte的word，那么情况变得很糟糕，我们依旧不得不读取128bytes的一整个line，而实际用到的却只是一个4-byte的word。</p>
+<p>总线利用率只有可怜的4/128=3.125%，当然这样子计算实际上有点不公平，可以看下面的推广：</p>
+<p><img alt="alt text" src="../lec4_img/lec4_6.png" /></p>
+<p>推广到更一般的情况，也就是我们请求的address实际上是分散 scattered的，假设我们一共需要读取N个cache-line。</p>
+<p>实际利用率即为128/(N*128)=1/N，在N=32时取到最小值，也就是3.125%。</p>
+<p><img alt="alt text" src="../lec4_img/lec4_7.png" /></p>
+<p>这个时候就要引出之前介绍到的non-caching load。核心在于当抛弃了L1-cache之后，我们实际的segment是32bytes的，也就是说我们不再需要牺牲128bytes去找一个word，而是只需要牺牲32bytes。</p>
+<p>利用率可以来到128/(N*32)=4/N，在N=32时取到12.5%。</p>
+<hr />
+<p>总结来看，关于global-memory的优化有以下这几条guidelines：</p>
+<ul>
+<li>如何更好的凝聚warp的需求：地址的对齐和连续性可以提高利用率</li>
+<li>让访存操作填满内存总线：在同一个thread上同时发起多个请求，同时启用足够多的线程来占用吞吐</li>
+<li>使用缓存：不止于L1/L2，当然这些是后话</li>
+</ul>
+<h2 id="shared-memory">SHARED MEMORY<a class="headerlink" href="#shared-memory" title="Permanent link">&para;</a></h2>
+<p>然后来看共享内存的使用。我们已经知道共享内存实际上是离processor最近的内存，根据一般的常识也会知道，它一定是我们能使用的最快的一部分内存！可以想象一个block里的一堆warp(thread*32)对一部分数据反复地进行运算和使用，把这些数据放在共享内存里肯定比放在全局内存里要好得多。</p>
+<p>在具体使用中，每一块共享内存实际被分为32个“银行”(bank，更正式的话应该叫存储体)每个银行支持4-byte宽的数据的存取。这里我将其看作“银行”感觉会很好理解后面的一些概念。总之银行的仓库可以看作无线，也就是每个银行可以存储无限个word；不过实际应用中我们的排列一般来说非常的有规律，也就是每128bytes将其按顺序一一填到32个bank中去，然后下一行的128bytes也是如此。将每个bank看作一列 column，那么共享内存的组织形式可以想象成下面这样一种二维存储结构：</p>
+<p><img alt="alt text" src="../lec4_img/lec4_8.png" /></p>
+<p>在warp看来这就是一个二维的矩阵，也相当的符合我们对矩阵进行操作的需求（大概是这个意思？</p>
+<p>当我们要分析共享内存的性能的时候，别忘了warp的定义：warp是“访存指令执行”的最小单位，warp上的32个threads执行同一条指令，只是从不同的地方取数。每个thread的访存需求会被warp打包送进共享内存的bank逻辑里处理，所以我们这里考虑32个threads-32个banks的具体对应情况来分析。</p>
+<p>定义以下几个概念：
+- “银行冲突”bank-conflicts：n个thread指向同一个bank需求的时候，产生冲突，延缓性能，称作n-way bank conflicts
+- “排队”serialization：当若干个thread要在同一个bank取不同的内容的时候，他们必须排队，然后bank用多个clock分别处理每个人的业务
+- “共需”multicast：当若干个thread要取的是同一个bank的同一个内容的时候，bank就不用夺管，直接一起处理业务，只需要一个clock</p>
+<p>可以看回上面那张大图，可以想象当我们需要取出矩阵的一列（这个操作显然非常常见）来操作，我们往往碰到一个serialization的难题。取出一行则很轻松，可以并行操作，在一个clock内轻松解决。</p>
+<p>为了让列load也能和行一样轻松，加入一个不参与实际使用，仅用于打乱顺序的padding列：</p>
+<p><img alt="alt text" src="../lec4_img/lec4_9.png" /></p>
+<p>然后我们依旧按顺序去排列一个bank-position，然后填入bank中对应的数据，我们的bank-based的数据依旧可以被视作一个宽32的矩阵，但这个时候再去访问一列，便无需排队！本质上就是打乱了原本的顺序。</p>
+<p>值得思考的是，如这样子似乎如果要取主对角线就很不方便了？暴力的想了想，或许只需要再加入一列Padding（笑</p>
+<hr />
+<p>最后一提：shared memory真的很快，1TB/s的带宽，只要合理使用之</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
