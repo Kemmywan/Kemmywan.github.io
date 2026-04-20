@@ -1,0 +1,83 @@
+site_name: Kemmy的笔记本
+site_description: CUDA / 密码学 / 3DGS
+site_author: Kemmy
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: 切换到浅色模式
+    - scheme: default
+      primary: indigo
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到深色模式
+  font:
+    text: JetBrains Mono
+    code: JetBrains Mono
+  icon:
+    logo: material/console-line
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - header.autohide
+
+nav:
+  - 首页: index.md
+  - 3DGS:
+      - 0415-meeting: 3DGS/0415.md
+  - CUDA:
+      - CUDA 开发环境搭建: cuda/env-setup.md
+  - 密码学:
+      - Schnorr 基本聚合签名算法: crypto/schnorr-agg.md
+
+markdown_extensions:
+  # 数学公式 (KaTeX)
+  - pymdownx.arithmatex:
+      generic: true
+  # 代码高亮
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  # 其他常用扩展
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra_javascript:
+  - javascripts/katex.js
+  - https://unpkg.com/katex@0/dist/katex.min.js
+  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
+
+extra_css:
+  - https://unpkg.com/katex@0/dist/katex.min.css
+  - stylesheets/extra.css
+
+plugins:
+  - search
