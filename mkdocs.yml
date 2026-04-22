@@ -44,9 +44,9 @@ nav:
   - 3DGS:
       - 0415-meeting: 3DGS/0415.md
   - CUDA:
-      - CUDA 开发环境搭建: cuda/env-setup.md
       - lec4: cuda/lec4.md
       - lec5: cuda/lec5.md
+      - lec6: cuda/lec6.md
   - 密码学:
       - Schnorr 基本聚合签名算法: crypto/schnorr-agg.md
 
