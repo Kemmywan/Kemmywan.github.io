@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../../3DGS/0415/">
+        <link rel="prev" href="../lec5/">
       
       
-        <link rel="next" href="../lec5/">
+        <link rel="next" href="../../crypto/schnorr-agg/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>lec4-CUDA optimization Part2 - Kemmy的笔记本</title>
+        <title>lec6-Managed Memory - Kemmy的笔记本</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#lec4-cuda-optimization-part2" class="md-skip">
+        <a href="#lec6-managed-memory" class="md-skip">
           跳转至
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              lec4-CUDA optimization Part2
+              lec6-Managed Memory
             
           </span>
         </div>
@@ -421,37 +421,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    lec4
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../lec4/" class="md-nav__link">
         
   
   
@@ -467,65 +440,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#global-memory-throughput" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GLOBAL MEMORY THROUGHPUT
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="GLOBAL MEMORY THROUGHPUT">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#load-operation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        LOAD OPERATION
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shared-memory" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SHARED MEMORY
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -563,10 +477,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../lec6/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    lec6
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -582,6 +523,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unified-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unified Memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用处
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        调优
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#umatshmm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UM&amp;ATS&amp;HMM
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -714,38 +719,43 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#global-memory-throughput" class="md-nav__link">
+  <a href="#unified-memory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GLOBAL MEMORY THROUGHPUT
+        Unified Memory
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="GLOBAL MEMORY THROUGHPUT">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#load-operation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        LOAD OPERATION
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#shared-memory" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SHARED MEMORY
+        用处
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        调优
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#umatshmm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UM&amp;ATS&amp;HMM
       
     </span>
   </a>
@@ -769,79 +779,67 @@
 
 
 
-<h1 id="lec4-cuda-optimization-part2">lec4-CUDA optimization Part2<a class="headerlink" href="#lec4-cuda-optimization-part2" title="Permanent link">&para;</a></h1>
-<p>前面几节课已经讲了基础的cuda内核编写的一些语法规则和示例。
-在这节课我们重点关注“运行速度”，这是使用cuda编程的重中之重，毕竟使用gpu的目的，一言以蔽之，就是加速我们的程序。在上一次的课程中已经讨论了第一个CUDA优化项的内容，那就是有关使用线程的数量——总得来说，我们希望运行尽可能多的线程，来填满gpu的算力，具体选择会根据gpu的架构有所不同。</p>
-<p>这次课程我们来关注第二个cuda优化项：高效地使用gpu上的存储子系统。（大概就是共享内存shared memory？）</p>
-<p>这两个优化项是实现性能优化的两个最重要的因素。（区别于分析驱动analysis-driven的优化，也就是实际使用中根据实地反馈进行的细致调优，和分析器profiler相关）</p>
-<hr />
-<h2 id="global-memory-throughput">GLOBAL MEMORY THROUGHPUT<a class="headerlink" href="#global-memory-throughput" title="Permanent link">&para;</a></h2>
-<p><img alt="alt text" src="../lec4_img/lec4_1.png" /></p>
-<p>我们可以从小到大（指工作范围）的来看一下gpu的存储层级架构：</p>
+<h1 id="lec6-managed-memory">lec6-Managed Memory<a class="headerlink" href="#lec6-managed-memory" title="Permanent link">&para;</a></h1>
+<p>首先明确一下这个概念，Managed Memory实际上和Unified Memory，也即统一内存是同一个东西，至于为什么叫这个名字，单纯是因为cuda里的api实现时名字带了个Managed，所以也叫Managed Memory。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_1.png" /></p>
+<p>简单回顾一下我们传统意义上的3-step的处理流程，第一步和第三步都需要做一个内存上的搬运。所以会想到，如果将这部分封装成一个“统一内存”，使得在host和device上都可以直接access到，那么从编程的角度来看就相当方便。</p>
+<h2 id="unified-memory">Unified Memory<a class="headerlink" href="#unified-memory" title="Permanent link">&para;</a></h2>
+<p>这个课程比较久远，现在大概已经又进化了不少了吧（总之先看看当时的内存架构：</p>
+<p><img alt="alt text" src="../lec6_img/lec6_2.png" /></p>
+<p>可以看到，在统一内存的基础上，我们可以允许给gpu分配大于其实际物理内存的内存（意味着其实并不是全在gpu上），从而加载更大的模型。同时在CPU和GPU中数据的协同，以及其上的原子操作都更加的方便。这里还涉及到运行性能的微调，这个后面的课才会讲到。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_3.png" /></p>
+<p>在统一内存管理下，数据的存取更方便了。右边的代码和左边对比，将原本的cpu-malloc换成了managed-malloc，然后加入了一步synchronize来保证gpu上的同步，最后free换成cudafree。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_4.png" /></p>
+<p>这张图就已经足够很好地诠释unified memory的大致实现方法。</p>
+<p>假设我们现在mallocmanaged和memset了，这个时候实际是在cpu内存上开了一块空间然后写入数据，这个时候我们调用一个gpu上的setValue，此时gpu的页表中没有对应的mapping，所以会报一个on-demand pagefault。然后会在总线上进行一个数据的迁移，物理意义上的将SetValue所需要的这部分（在gpu上应当被看作是line）从cpu上复制到gpu上，如图所示，只物理拷贝了一行。当然数据迁移之后也完成对应的页表映射。</p>
+<p>随后我们的gpu就能正常使用这个unified memory的映射去完成任务。这个时候如果cpu又需要access这部分修改过的内容呢？在gpu侧进行写入之后，这一部分的项目会被标记为过时 dirty，因此当cpu需要的时候，会倒反天罡从Gpu处把这一部分数据物理迁移回来，从而保证内存的一致性。</p>
+<p>嗯...这样子一直换页似乎开销很大，这和原来的每次的memcopy似乎也没什么区别？（后面有进一步的优化稍安勿躁之</p>
+<h2 id="_1">用处<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p><img alt="alt text" src="../lec6_img/lec6_5.png" /></p>
+<p>前面提到的“虚假”内存分配，允许gpu使用更多的内存。至于如何使用，从前面的缺页机制来看，应该也是有在内存满时的一些换入换出的机制，这里没有细讲。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_6.png" /></p>
+<p>这里提到的是，虽然UM允许我们去方便地在cpu和gpu内存中切换访问，但是如果像上面这里一样，使用完gpu之后没有加入同步原语，那么就会产生cpu和gpu的重叠访问导致bug，这里会直接call segmentation fault。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_7.png" /></p>
+<p>system-wide atomics 是指对某个内存位置的原子操作，其原子性和内存顺序保证在整个系统范围内生效，包括：</p>
 <ul>
-<li>本地存储 Local storage：每个线程都会有属于其自己的本地存储，一般来说就是寄存器 regsiters，具体何使用寄存器则由编译器 compiler来决定。  </li>
-<li>共享内存 shared memory：由同一个区块 block内的线程共同使用，分配大约48KB，这和具体架构有关，也可能是64KB，96KB，等等。有着低延迟和高吞吐量的特点，后者可以干到1TB/s。可以人工显示管理。  </li>
-<li>L1缓存：作为缓存模块，用于加速一个SM上所有线程的内存访问，是一个每线程块资源 per thread block resource  </li>
-<li>L2缓存：同样作为缓存模块，与L1区别，是设备范围的资源 device-wide resource。是GPU共享的最后一级缓存，由所有SM共同使用，逻辑上属于全局共享，和L1一样不受人工管理  </li>
-<li>全局内存 Global memory：这是一个可以由全体线程，包括主机（CPU）共同访问的模块，也是最后的，最大的层级元素，高延迟和低吞吐自不必多说，吞吐量在900GB/s左右（Volta V100），虽然与GPU架构中其他元素相比很低，但和其他类型的处理器相比已经是鹤立鸡群（典型的CPU内存带宽只有40-80GB/s）  </li>
+<li>当前 GPU 的所有线程/blocks. </li>
+<li>其他 GPU（在共享/统一地址空间场景）. </li>
+<li>CPU 线程. </li>
 </ul>
-<p><img alt="alt text" src="../lec4_img/lec4_2.png" /></p>
-<p>这是一个更直观的GPU内部的层级图。</p>
-<p>当我们讨论性能优化的时候，一般来说就是Load和Store，GPU上的读写和传统CPU上的架构类似，用两级的缓存加速load，然后store的时候涉及一个validate当前L1-cache和L2-cache上的写回 write-back机制来实现效率和准确率的统一。不同的是这里的Load在使用L1-cache的情况下以128-byte的line为单位进行读操作。</p>
-<p>同时gpu上有一种non-caching load，也就是忽略掉L1-cache来进行Load操作。由于L1-cache以block为单位，在一些corner situation中，这会有更好的效果。这种情况下以32-byte为单位。这里先按下不表。</p>
-<hr />
-<h3 id="load-operation">LOAD OPERATION<a class="headerlink" href="#load-operation" title="Permanent link">&para;</a></h3>
-<p>gpu上的所有操作都是以warp(32 threads)为单位来进行的，load也不例外。注意这并不意味着说每个thread都在请求同样的东西，32个threads可以有32个不同的address传入，从而请求load不同的内存。</p>
-<p>在每一个thread提供load目标地址之后，系统需要做的事情是确定需要取缓存中的哪些line。更底层的，是去找需要取出哪些segment。这首先要求我们做一个凝聚 colaescing，将warp的request包装成一个完成的Load需求传给内存控制器，比如一串连续的地址请求，就可以包装成读取一整串line（见下面的第一幅图</p>
-<blockquote>
-<p>区分一下line和segment：<br />
-line 一般指cache-line，是在L1/L2缓存中存储数据的基本单位，在大部分gpu上是128bytes，是操作cache的最小单位<br />
-segment 是在某个层次上（比如dram/L2-bus）上，一次内存事务可以操作的最小连续字节，一般是32bytes，是一个偏向硬件内存控制器的一个“基本块”的概念<br />
-所以说在处理存取事务的时候，我们实际关注的是segment，Line则是我们后续进行凝聚 colaescing要关注的一个面向缓存的单位  </p>
-</blockquote>
-<p>这将涉及到一个地址的映射 mapping操作，会交由内存控制器来完成，并决定是否从缓存中取数据。</p>
-<p>下面来看几种常见的load模式：</p>
-<p><img alt="alt text" src="../lec4_img/lec4_3.png" /></p>
-<p>这种情况下，我们假设warp请求了32个连续且与内存地址对齐的4-byte内容，也就是一共请求了128byte，正好对上一个完整的cache-line。同时我们假设一种最好的情况那就是其和一个line完整对齐，这个时候直接取这个完整的line就可以刚刚好取出所有需要的数据。</p>
-<p>这是我们计算总线利用率应该是100%，也即128/128=100%。</p>
-<p><img alt="alt text" src="../lec4_img/lec4_4.png" /></p>
-<p>在没那么理想的情况下，当我们请求的内容不再能被一个cache-line覆盖，而是跨越的cache-line的一个boundary的时候，可以看到标红的地方，我们实际需要取出256个Bytes的数据来满足warp的需要。</p>
-<p>这里Bus utilization=128/256=50%。然而，假设我们之后的warp按顺序访问后续的内存，而我们的cache机制发挥作用，后续每次Load似乎只需要多读一个line（cache读取忽略不计），那么似乎总线利用率也会约等于100%。这是后话。</p>
-<p><img alt="alt text" src="../lec4_img/lec4_5.png" /></p>
-<p>接下来看点极端的情况，假设我的整个warp实际只需要同一个4-byte的word，那么情况变得很糟糕，我们依旧不得不读取128bytes的一整个line，而实际用到的却只是一个4-byte的word。</p>
-<p>总线利用率只有可怜的4/128=3.125%，当然这样子计算实际上有点不公平，可以看下面的推广：</p>
-<p><img alt="alt text" src="../lec4_img/lec4_6.png" /></p>
-<p>推广到更一般的情况，也就是我们请求的address实际上是分散 scattered的，假设我们一共需要读取N个cache-line。</p>
-<p>实际利用率即为128/(N*128)=1/N，在N=32时取到最小值，也就是3.125%。</p>
-<p><img alt="alt text" src="../lec4_img/lec4_7.png" /></p>
-<p>这个时候就要引出之前介绍到的non-caching load。核心在于当抛弃了L1-cache之后，我们实际的segment是32bytes的，也就是说我们不再需要牺牲128bytes去找一个word，而是只需要牺牲32bytes。</p>
-<p>利用率可以来到128/(N*32)=4/N，在N=32时取到12.5%。</p>
-<hr />
-<p>总结来看，关于global-memory的优化有以下这几条guidelines：</p>
+<p>相对的，普通 device-scope atomics 只保证 GPU 内部原子，对 CPU 或其他 GPU 不提供一致性保证。system-wide 原子适合在 CPU/GPU、多 GPU 间共享计数器、标志位或锁等场景，但代价明显更高，因此应只用于必要的跨设备同步，频繁高并发的累加仍应优先用 device-scope + 分层汇总。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_8.png" /></p>
+<p>一种常见的应用是做deepcopy。假设有一个c-struct长左上角这样，如果只是int元素，那么根本不需要deepcopy，数据的迁移已经由UM实现。但是如果需要真正的在UM空间中做deepcopy，那么除了int值，我们的指针所指向的数据也要取出一份，然后deepcopy一份粘贴到新位置。也就是，我们在简单的拷贝了结构体之后，还要修一下我们的指针，让他也指向一个新的但是数据和原来一样的空间。这就涉及到一个额外的mallocmanaged过程。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_9.png" /></p>
+<p>这一块则是通过重载我们的new和delete来更方便的实现UM上的操作。</p>
+<p><img alt="alt text" src="../lec6_img/lec6_10.png" /></p>
+<p>不得不说图计算从UM中受益许多，后者允许我们加载一个很大的图并在上进行运算。至于原因也很简单，我们不需要在gpu中加载整个图，而是通过on-demand paging的方式按需取点，比如当我们在图上做bfs遍历的时候，每次都只有邻近点的处理需求，这个时候将其加载到gpu上就行。借此我们可以大大提升图处理的性能。</p>
+<h2 id="_2">调优<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>前面也说过，单纯的依赖page-fault换页是很蠢的，特别是当换入的内容太大，而且很多无效信息的时候，其性能甚至不如我像一开始一样做单纯的memcpy。所以我们需要一些调优机制。</p>
+<p>首先是prefetch：</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">cudaError_t</span><span class="w"> </span><span class="nf">cudaMemPrefetchAsync</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">devPtr</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">count</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">dstDevice</span><span class="p">,</span><span class="w"> </span><span class="n">cudaStream_t</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span></code></pre></div>
+<p>cuda为我们提供了这样一个手动prefetch的选项。一方面，它支持我们手动选择一部分内存进行迁移，比如提前从cpu迁移到gpu，这样就可以节省page-fault环节产生的额外开销。另一方面，它是一个异步的操作，可以在另一个cudastream上与我们的计算并行，不会额外占用时间。</p>
+<p>除此之外，我们也可以给runtime一些advise，它们会调整runtime管理UM的一些倾向和方式，课程内提到有以下几种advise:</p>
 <ul>
-<li>如何更好的凝聚warp的需求：地址的对齐和连续性可以提高利用率  </li>
-<li>让访存操作填满内存总线：在同一个thread上同时发起多个请求，同时启用足够多的线程来占用吞吐  </li>
-<li>使用缓存：不止于L1/L2，当然这些是后话  </li>
+<li><code>cudaMemAdvise(ptr, size, cudaMemAdviseSetPreferredLocation, device);</code> 说明这块内存要长期放在device上，runtime会尽量将其主要副本放在这个设备的内存中. </li>
+<li><code>cudaMemAdvise(ptr, size, cudaMemAdviseSetReadMostly, 0);</code> 说明这部分内存大部分时候都是只读，所以可以创建大量副本，进行更积极的复制，不用顾虑写回的开销</li>
+<li><code>cudaMemAdvise(ptr, size, cudaMemAdviseSetAccessedBy, device);</code> 这是一个访问的提前预告，runtime会在后台做额外映射或提前准备，避免第一次访问时的某些开销（比如建立页表映射）</li>
 </ul>
-<h2 id="shared-memory">SHARED MEMORY<a class="headerlink" href="#shared-memory" title="Permanent link">&para;</a></h2>
-<p>然后来看共享内存的使用。我们已经知道共享内存实际上是离processor最近的内存，根据一般的常识也会知道，它一定是我们能使用的最快的一部分内存！可以想象一个block里的一堆warp(thread*32)对一部分数据反复地进行运算和使用，把这些数据放在共享内存里肯定比放在全局内存里要好得多。</p>
-<p>在具体使用中，每一块共享内存实际被分为32个“银行”(bank，更正式的话应该叫存储体)每个银行支持4-byte宽的数据的存取。这里我将其看作“银行”感觉会很好理解后面的一些概念。总之银行的仓库可以看作无线，也就是每个银行可以存储无限个word；不过实际应用中我们的排列一般来说非常的有规律，也就是每128bytes将其按顺序一一填到32个bank中去，然后下一行的128bytes也是如此。将每个bank看作一列 column，那么共享内存的组织形式可以想象成下面这样一种二维存储结构：</p>
-<p><img alt="alt text" src="../lec4_img/lec4_8.png" /></p>
-<p>在warp看来这就是一个二维的矩阵，也相当的符合我们对矩阵进行操作的需求（大概是这个意思？</p>
-<p>当我们要分析共享内存的性能的时候，别忘了warp的定义：warp是“访存指令执行”的最小单位，warp上的32个threads执行同一条指令，只是从不同的地方取数。每个thread的访存需求会被warp打包送进共享内存的bank逻辑里处理，所以我们这里考虑32个threads-32个banks的具体对应情况来分析。</p>
-<p>定义以下几个概念：  </p>
+<h2 id="umatshmm">UM&amp;ATS&amp;HMM<a class="headerlink" href="#umatshmm" title="Permanent link">&para;</a></h2>
 <ul>
-<li>“银行冲突”bank-conflicts：n个thread指向同一个bank需求的时候，产生冲突，延缓性能，称作n-way bank conflicts  </li>
-<li>“排队”serialization：当若干个thread要在同一个bank取不同的内容的时候，他们必须排队，然后bank用多个clock分别处理每个人的业务  </li>
-<li>“共需”multicast：当若干个thread要取的是同一个bank的同一个内容的时候，bank就不用夺管，直接一起处理业务，只需要一个clock  </li>
+<li>
+<p>UM（Unified Memory）：CUDA 的软件抽象 + runtime 机制。让你用一个指针在 CPU/GPU 间共享数据，不用手写 cudaMemcpy。关键实现手段：按需分页 + 页迁移 + 提示（prefetch/advise）。</p>
+</li>
+<li>
+<p>ATS（Address Translation Services）：硬件/总线协议级支持（PCIe 功能），允许设备（GPU）发起内存访问时，向 CPU 的 IOMMU 请求 CPU 虚拟地址的翻译。使得GPU 能直接用 CPU 虚拟地址访问 host 内存（零拷贝 + 更好的一致性基础）。</p>
+</li>
+<li>
+<p>HMM（Heterogeneous Memory Management）：Linux 内核的异构内存管理框架，让 CPU &amp; 设备共享统一的虚拟地址空间与页表，支持设备页 fault 回调、与内核的统一内存管理。给像 NVIDIA/AMD 这种驱动提供“OS 级支撑”。</p>
+</li>
 </ul>
-<p>可以看回上面那张大图，可以想象当我们需要取出矩阵的一列（这个操作显然非常常见）来操作，我们往往碰到一个serialization的难题。取出一行则很轻松，可以并行操作，在一个clock内轻松解决。</p>
-<p>为了让列load也能和行一样轻松，加入一个不参与实际使用，仅用于打乱顺序的padding列：</p>
-<p><img alt="alt text" src="../lec4_img/lec4_9.png" /></p>
-<p>然后我们依旧按顺序去排列一个bank-position，然后填入bank中对应的数据，我们的bank-based的数据依旧可以被视作一个宽32的矩阵，但这个时候再去访问一列，便无需排队！本质上就是打乱了原本的顺序。</p>
-<p>值得思考的是，如这样子似乎如果要取主对角线就很不方便了？暴力的想了想，或许只需要再加入一列Padding（笑</p>
-<hr />
-<p>最后一提：shared memory真的很快，1TB/s的带宽，只要合理使用之</p>
+<p>所以实际上ATS和HMM是在底层给UM擦屁股。更详细地说：ATS 在总线层提供 VA 翻译能力，HMM 在内核层接手页表与页 fault 管理，UM 在 CUDA 层利用这套能力，对开发者暴露简单的统一内存 API 与高层迁移策略。</p>
 
 
 
